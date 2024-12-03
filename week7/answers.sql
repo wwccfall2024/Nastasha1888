@@ -97,9 +97,9 @@ ORDER BY character_name, item_name;
 
 CREATE OR REPLACE VIEW team_items AS 
 SELECT tm.team_id,
-		t.name AS team_name,
-		i.name AS item_name,
-		i.armor, i.damage
+       t.name AS team_name,
+       i.name AS item_name,
+       i.armor, i.damage
 FROM team_members tm
 JOIN teams t ON tm.team_id = t.team_id
 JOIN characters c ON tm.character_id = c.character_id
@@ -107,14 +107,16 @@ LEFT JOIN inventory inv ON c.character_id = inv.character_id
 LEFT JOIN items i ON inv.item_id = i.item_id
 UNION
 SELECT tm.team_id,
-	   t.name AS team_name,
-	   e.item_id AS item_name,
-	   i.armor, i.damage
+       t.name AS team_name,
+       e.item_id AS item_name,
+       i.armor, i.damage
 FROM team_members tm
 JOIN teams t ON tm.team_id = t.team_id
 JOIN characters c ON tm.character_id = c.character_id
 LEFT JOIN equipped e ON c.character_id = e.character_id
-LEFT JOIN items i ON e.item_id = i.item_id;
+LEFT JOIN items i ON e.item_id = i.item_id
+WHERE i.name IS NOT NULL
+ORDER BY team_name, item_name;
 
 DELIMITER ;;
 

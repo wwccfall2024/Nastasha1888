@@ -109,7 +109,7 @@ WHERE i.name IS NOT NULL
 UNION
 SELECT tm.team_id,
        t.name AS team_name,
-       e.item_id AS item_name,
+       i.name AS item_name,
        i.armor, i.damage
 FROM team_members tm
 JOIN teams t ON tm.team_id = t.team_id

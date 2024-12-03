@@ -88,7 +88,7 @@ LEFT JOIN items i ON inv.item_id = i.item_id
 UNION
 SELECT c.character_id,
     c.name AS character_name,
-    eq.item_id AS item_name,
+    it.item_id AS item_name,
     it.armor, it.damage
 FROM characters c
 LEFT JOIN equipped eq ON c.character_id = eq.character_id

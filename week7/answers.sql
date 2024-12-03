@@ -93,6 +93,7 @@ SELECT c.character_id,
 FROM characters c
 LEFT JOIN equipped eq ON c.character_id = eq.character_id
 LEFT JOIN items i ON eq.item_id = i.item_id;
+ORDER BY character_name, item_name;
 
 CREATE OR REPLACE VIEW team_items AS 
 SELECT tm.team_id,

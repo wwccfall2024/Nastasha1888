@@ -39,7 +39,7 @@ name VARCHAR(40) NOT NULL
 );
 
 CREATE TABLE team_members (
-team_memeber_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+team_member_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 team_id INT UNSIGNED,
 character_id INT UNSIGNED,
 FOREIGN KEY(team_id)
@@ -126,16 +126,19 @@ RETURNS INT
 DETERMINISTIC
 BEGIN
     DECLARE total_armor INT DEFAULT 0;
+    DECLARE armor_from_stats INT DEFAULT 0;
+    DECLARE armor_from_equipped INT DEFAULT 0;
 
-    SELECT armor INTO total_armor
-    FROM character_stats
-    WHERE character_id = character_id;
+    SELECT COALESCE(SUM(cs.armor), 0) INTO armor_from_stats
+    FROM character_stats cs
+    WHERE cs.character_id = character_id;
 
-    SELECT COALESCE(SUM(i.armor), 0) INTO total_armor
+    SELECT COALESCE(SUM(i.armor), 0) INTO armor_from_equipped
     FROM equipped e
     JOIN items i ON e.item_id = i.item_id
-    WHERE e.character_id = character_id
-    GROUP BY e.character_id;
+    WHERE e.character_id = character_id;
+
+    SET total_armor = armor_from_stats + armor_from_equipped;
 
     RETURN total_armor;
 END;;

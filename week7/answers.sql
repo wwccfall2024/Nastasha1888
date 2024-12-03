@@ -148,6 +148,13 @@ BEGIN
     DECLARE damage INT;
     DECLARE armor INT;
     DECLARE character_health INT;
+    
+    DECLARE health_cursor CURSOR FOR 
+            SELECT health 
+            FROM character_stats 
+            WHERE character_id = id_of_character_being_attacked;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET character_health = -1;
 
     SELECT damage INTO damage
     FROM items
@@ -161,13 +168,6 @@ BEGIN
         SET health = health - total_damage
         WHERE character_id = id_of_character_being_attacked;
 
-        DECLARE health_cursor CURSOR FOR 
-            SELECT health 
-            FROM character_stats 
-            WHERE character_id = id_of_character_being_attacked;
-
-        DECLARE CONTINUE HANDLER FOR NOT FOUND SET character_health = -1;
-
         OPEN health_cursor;
 
         FETCH health_cursor INTO character_health;
@@ -179,7 +179,7 @@ BEGIN
             WHERE character_id = id_of_character_being_attacked;
         END IF;
     END IF;
-END$$
+END;;
 
 CREATE PROCEDURE equip(
     IN inventory_id INT
@@ -198,7 +198,7 @@ BEGIN
 
     DELETE FROM inventory
     WHERE inventory_id = inventory_id;
-END$$
+END;;
 
 CREATE PROCEDURE unequip(
     IN equipped_id INT
@@ -217,7 +217,7 @@ BEGIN
 
     DELETE FROM equipped
     WHERE equipped_id = equipped_id;
-END$$
+END;;
 
 CREATE PROCEDURE set_winners(
     IN team_id INT
@@ -252,6 +252,6 @@ BEGIN
     END LOOP;
 
     CLOSE winner_cursor;
-END$$
+END;;
 
 DELIMITER ;

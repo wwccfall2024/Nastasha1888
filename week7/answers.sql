@@ -130,7 +130,7 @@ BEGIN
 
     SELECT armor INTO base_armor
     FROM character_stats
-    WHERE e.character_id = character_id;
+    WHERE character_id = character_id;
 
     SELECT SUM(i.armor) INTO total_armor
     FROM equipped e

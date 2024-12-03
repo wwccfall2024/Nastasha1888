@@ -245,7 +245,7 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        INSERT INTO winners (character_id, name)
+        INSERT IGNORE INTO winners (character_id, name)
         SELECT character_id, name
         FROM characters
         WHERE character_id = character_id;

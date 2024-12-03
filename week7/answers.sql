@@ -20,7 +20,7 @@ REFERENCES players(player_id)
 
 CREATE TABLE winners (
 character_id INT UNSIGNED PRIMARY KEY,
-name VARCHAR(40),
+name VARCHAR(40) NOT NULL,
 FOREIGN KEY(character_id)
 REFERENCES characters(character_id)
 );
@@ -35,7 +35,7 @@ REFERENCES characters(character_id) ON DELETE CASCADE
 
 CREATE TABLE teams (
 team_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-name VARCHAR(40)
+name VARCHAR(40) NOT NULL
 );
 
 CREATE TABLE team_members (
@@ -51,9 +51,9 @@ ON DELETE CASCADE
 
 CREATE TABLE items (
 item_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-name VARCHAR(40),
-armor INT UNSIGNED,
-damage INT UNSIGNED
+name VARCHAR(40) NOT NULL,
+armor INT UNSIGNED NOT NULL,
+damage INT UNSIGNED NOT NULL
 );
 
 CREATE TABLE inventory (

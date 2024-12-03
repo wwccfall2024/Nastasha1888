@@ -88,11 +88,11 @@ LEFT JOIN items i ON inv.item_id = i.item_id
 UNION
 SELECT c.character_id,
     c.name AS character_name,
-    it.item_id AS item_name,
-    it.armor, it.damage
+    i.name AS item_name,
+    i.armor, i.damage
 FROM characters c
 LEFT JOIN equipped eq ON c.character_id = eq.character_id
-LEFT JOIN items it ON eq.item_id = it.item_id;
+LEFT JOIN items i ON eq.item_id = i.item_id;
 
 CREATE OR REPLACE VIEW team_items AS 
 SELECT tm.team_id,

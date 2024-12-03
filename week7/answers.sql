@@ -134,7 +134,7 @@ BEGIN
     SELECT COALESCE(SUM(i.armor), 0) INTO total_armor
     FROM equipped e
     JOIN items i ON e.item_id = i.item_id
-    WHERE e.character_id = character_id;
+    WHERE e.character_id = character_id
     GROUP BY e.character_id;
 
     RETURN total_armor;

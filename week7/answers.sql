@@ -105,6 +105,7 @@ JOIN teams t ON tm.team_id = t.team_id
 JOIN characters c ON tm.character_id = c.character_id
 LEFT JOIN inventory inv ON c.character_id = inv.character_id
 LEFT JOIN items i ON inv.item_id = i.item_id
+WHERE i.name IS NOT NULL
 UNION
 SELECT tm.team_id,
        t.name AS team_name,

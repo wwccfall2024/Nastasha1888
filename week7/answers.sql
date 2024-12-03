@@ -246,9 +246,10 @@ BEGIN
         END IF;
 
         INSERT IGNORE INTO winners (character_id, name)
-        SELECT character_id, name
-        FROM characters
-        WHERE character_id = character_id;
+        SELECT tm.character_id, c.name
+        FROM team_members tm
+        JOIN characters c ON tm.character_id = c.character_id
+        WHERE tm.team_id = team_id;
     END LOOP;
 
     CLOSE winner_cursor;

@@ -131,7 +131,7 @@ BEGIN
     FROM character_stats
     WHERE character_id = character_id;
 
-    SELECT SUM(i.armor) INTO total_armor
+    SELECT COALESCE(i.armor) INTO total_armor
     FROM equipped e
     JOIN items i ON e.item_id = i.item_id
     WHERE e.character_id = character_id;

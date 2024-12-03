@@ -126,12 +126,13 @@ RETURNS INT
 DETERMINISTIC
 BEGIN
     DECLARE total_armor INT DEFAULT 0;
+    DECLARE base_armor INT DEFAULT 0;
 
-    SELECT health + armor INTO total_armor
+    SELECT armor INTO total_armor
     FROM character_stats
     WHERE character_id = character_id;
 
-    SELECT COALESCE(i.armor) INTO total_armor
+    SELECT COALESCE(i.armor, 0) INTO total_armor
     FROM equipped e
     JOIN items i ON e.item_id = i.item_id
     WHERE e.character_id = character_id;
@@ -140,7 +141,7 @@ BEGIN
         SET total_armor = 0;
     END IF;
 
-    RETURN total_armor;
+    RETURN base_armor + total_armor;
 END;;
 
 CREATE PROCEDURE attack(

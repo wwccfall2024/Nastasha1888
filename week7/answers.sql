@@ -27,7 +27,7 @@ REFERENCES characters(character_id)
 
 CREATE TABLE character_stats (
 character_id INT UNSIGNED PRIMARY KEY,
-health INT UNSIGNED NOT NULL,
+health INT NOT NULL,
 armor INT UNSIGNED NOT NULL,
 FOREIGN KEY(character_id)
 REFERENCES characters(character_id) ON DELETE CASCADE

@@ -201,8 +201,8 @@ BEGIN
     INSERT INTO equipped (character_id, item_id)
     VALUES (character_id, item_id);
 
-    DELETE FROM inventory
-    WHERE inventory_id = inventory_id;
+    DELETE FROM inventory inv
+    WHERE inv.inventory_id = inventory_id;
 END;;
 
 CREATE PROCEDURE unequip(

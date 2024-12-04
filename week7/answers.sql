@@ -23,6 +23,7 @@ character_id INT UNSIGNED PRIMARY KEY,
 name VARCHAR(40) NOT NULL,
 FOREIGN KEY(character_id)
 REFERENCES characters(character_id)
+ON DELETE CASCADE
 );
 
 CREATE TABLE character_stats (

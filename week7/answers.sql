@@ -160,25 +160,26 @@ BEGIN
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET character_health = -1;
 
-    SELECT damage INTO damage
-    FROM items
-    WHERE item_id = id_of_equipped_item_used_for_attack;
+    SELECT i.damage INTO damage
+    FROM equipped e
+    JOIN items i ON e.item_id = i.item_id
+    WHERE e.equipped_id = id_of_equipped_item_used_for_attack;
 
     SET armor = armor_total(id_of_character_being_attacked);
 	SET total_damage = damage - armor;
-
+	
     IF total_damage > 0 THEN
+	OPEN health_cursor;
+	FETCH health_cursor INTO character_health;
+	CLOSE health_cursor;
+        
+        SET character_health = character_health - total_damage;
+        
         UPDATE character_stats
         SET health = health - total_damage
         WHERE character_id = id_of_character_being_attacked;
 
-        OPEN health_cursor;
-
-        FETCH health_cursor INTO character_health;
-
-        CLOSE health_cursor;
-
-		IF character_health <= 0 THEN
+        IF character_health <= 0 THEN
 			DELETE FROM characters 
             WHERE character_id = id_of_character_being_attacked;
         END IF;

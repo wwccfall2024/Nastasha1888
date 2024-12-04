@@ -214,16 +214,16 @@ BEGIN
     DECLARE character_id INT;
     DECLARE item_id INT;
 
-    SELECT character_id, item_id
+    SELECT e.character_id, e.item_id
     INTO character_id, item_id
-    FROM equipped
-    WHERE equipped_id = equipped_id;
+    FROM equipped e
+    WHERE e.equipped_id = equipped_id;
 
     INSERT INTO inventory (character_id, item_id)
     VALUES (character_id, item_id);
 
-    DELETE FROM equipped
-    WHERE equipped_id = equipped_id;
+    DELETE FROM equipped e
+    WHERE e.equipped_id = equipped_id;
 END;;
 
 CREATE PROCEDURE set_winners(

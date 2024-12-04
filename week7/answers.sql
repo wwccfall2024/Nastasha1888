@@ -192,11 +192,11 @@ CREATE PROCEDURE equip(
 BEGIN
     DECLARE character_id INT;
     DECLARE item_id INT;
-    
+
     SELECT character_id, item_id
     INTO character_id, item_id
-    FROM inventory
-    WHERE inventory_id = inventory_id;
+    FROM inventory inv
+    WHERE inv.inventory_id = inventory_id;
 
     INSERT INTO equipped (character_id, item_id)
     VALUES (character_id, item_id);

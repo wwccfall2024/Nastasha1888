@@ -47,10 +47,10 @@ CREATE TABLE team_members (
 	team_member_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	team_id INT UNSIGNED,
 	character_id INT UNSIGNED,
-	CONSTRAINTS team_fk_team_members
+	CONSTRAINT team_fk_team_members
 		FOREIGN KEY(team_id)
 		REFERENCES teams(team_id),
-	CONSTRAINTS characters_fk_team_members
+	CONSTRAINT characters_fk_team_members
 		FOREIGN KEY(character_id)
 		REFERENCES characters(character_id)
 		ON DELETE CASCADE
@@ -67,11 +67,11 @@ CREATE TABLE inventory (
 	inventory_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	character_id INT UNSIGNED,
 	item_id INT UNSIGNED,
-	CONSTRAINTS inventory_fk_characters
+	CONSTRAINT inventory_fk_characters
 		FOREIGN KEY(character_id) 
 		REFERENCES characters(character_id) 
 		ON DELETE CASCADE,
-	CONSTRAINTS items_fk_inventory
+	CONSTRAINT items_fk_inventory
 		FOREIGN KEY(item_id) 
 		REFERENCES items(item_id)
 );
@@ -80,11 +80,11 @@ CREATE TABLE equipped (
 	equipped_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	character_id INT UNSIGNED,
 	item_id INT UNSIGNED,
-	CONSTRAINTS equipped_fk_characters
+	CONSTRAINT equipped_fk_characters
 		FOREIGN KEY(character_id) 
 		REFERENCES characters(character_id)
 		ON DELETE CASCADE,
-	CONSTRAINTS equipped_fk_items
+	CONSTRAINT equipped_fk_items
 		FOREIGN KEY(item_id) 
 		REFERENCES items(item_id)
 );

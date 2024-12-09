@@ -96,6 +96,6 @@ ON SCHEDULE EVERY 10 SECOND
 DO
     DELETE FROM sessions 
     WHERE updated_on < DATE_SUB(NOW(), INTERVAL 2 HOUR)
-    OR created_on < DATE_SUB(NOW(), INTERVAL 2 HOUR);;
+    AND created_on < DATE_SUB(NOW(), INTERVAL 2 HOUR);;
 
 DELIMITER ;

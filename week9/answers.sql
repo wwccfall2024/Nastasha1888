@@ -47,6 +47,7 @@ CREATE TABLE notifications (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
   CONSTRAINT notifications_fk_posts
     FOREIGN KEY (post_id) REFERENCES posts(post_id)
+  ON DELETE CASCADE
 );
 
 CREATE  OR REPLACE VIEW notification_posts AS

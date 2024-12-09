@@ -17,6 +17,7 @@ CREATE TABLE sessions (
   updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT users_fk_sessions
     FOREIGN KEY (user_id) REFERENCES users(user_id)
+  ON DELETE CASCADE
   );
 
 CREATE TABLE friends (
@@ -39,6 +40,7 @@ CREATE TABLE posts (
   content VARCHAR(255),
   CONSTRAINT posts_fk_users
     FOREIGN KEY (user_id) REFERENCES users(user_id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE notifications (
@@ -47,6 +49,7 @@ CREATE TABLE notifications (
   post_id INT UNSIGNED,
   CONSTRAINT notifications_fk_users
     FOREIGN KEY (user_id) REFERENCES users(user_id),
+  ON DELETE CASCADE
   CONSTRAINT notifications_fk_posts
     FOREIGN KEY (post_id) REFERENCES posts(post_id)
   ON DELETE CASCADE

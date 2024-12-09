@@ -48,7 +48,7 @@ CREATE TABLE notifications (
   user_id INT UNSIGNED,
   post_id INT UNSIGNED,
   CONSTRAINT notifications_fk_users
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
   ON DELETE CASCADE,
   CONSTRAINT notifications_fk_posts
     FOREIGN KEY (post_id) REFERENCES posts(post_id)

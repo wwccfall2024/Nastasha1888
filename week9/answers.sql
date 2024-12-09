@@ -27,6 +27,7 @@ CREATE TABLE friends (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
   CONSTRAINT friends_fk_friends
     FOREIGN KEY (friend_id) REFERENCES users(user_id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE posts (

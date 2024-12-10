@@ -129,7 +129,9 @@ BEGIN
     (user_id, content)
   VALUES 
     (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+    SET @last_post_id = LAST_INSERT_ID();
 
+    INSERT INTO notifications (user_id, post_id) VALUES (current_user_id, @last_post_id);
   OPEN users_cursor;
   
   users_loop: LOOP

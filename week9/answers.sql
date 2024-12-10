@@ -59,31 +59,31 @@ DELIMITER ;;
 
 CREATE PROCEDURE fetch_user_ids()
 BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE current_post_id INT;
-    DECLARE current_user_id INT;
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE current_post_id INT;
+  DECLARE current_user_id INT;
+  
+  DECLARE post_id_cursor CURSOR FOR 
+    SELECT post_id 
+      FROM notifications;
 
-    DECLARE post_id_cursor CURSOR FOR 
-      SELECT post_id 
-        FROM notifications;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-    OPEN post_id_cursor;
+  OPEN post_id_cursor;
     post_loop: LOOP
-        FETCH post_id_cursor INTO current_post_id;
+      FETCH post_id_cursor INTO current_post_id;
         IF done THEN
             LEAVE post_loop;
         END IF;
 
-        SELECT user_id INTO current_user_id
-        FROM posts
-        WHERE post_id = current_post_id;
+      SELECT user_id INTO current_user_id
+      FROM posts
+      WHERE post_id = current_post_id;
 
-        INSERT INTO fetched_users 
-          (current_post_id, current_user_id) 
-        VALUES 
-          (current_post_id, current_user_id);
+      INSERT INTO fetched_users 
+        (current_post_id, current_user_id) 
+      VALUES 
+        (current_post_id, current_user_id);
     END LOOP;
 
     CLOSE post_id_cursor;
@@ -116,35 +116,36 @@ CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
-INSERT INTO posts 
-  (user_id, content)
-VALUES 
-  (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+  
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE current_user_id INT;
 
-DECLARE done INT DEFAULT FALSE;
-DECLARE current_user_id INT;
-
-DECLARE users_cursor CURSOR FOR 
-  SELECT user_id 
-  FROM users 
-  WHERE user_id != NEW.user_id;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-OPEN users_cursor;
-
-users_loop: LOOP
-    FETCH users_cursor INTO current_user_id;
-    IF done THEN
-        LEAVE users_loop;
-    END IF;
-
-    INSERT INTO notifications 
-      (user_id, post_id)
-    VALUES 
-      (current_user_id, LAST_INSERT_ID());
-END LOOP;
-
-CLOSE users_cursor;
+  INSERT INTO posts 
+    (user_id, content)
+  VALUES 
+    (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+  
+  DECLARE users_cursor CURSOR FOR 
+    SELECT user_id 
+      FROM users 
+      WHERE user_id != NEW.user_id;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  
+  OPEN users_cursor;
+  
+  users_loop: LOOP
+      FETCH users_cursor INTO current_user_id;
+      IF done THEN
+          LEAVE users_loop;
+      END IF;
+  
+      INSERT INTO notifications 
+        (user_id, post_id)
+      VALUES 
+        (current_user_id, LAST_INSERT_ID());
+  END LOOP;
+  
+  CLOSE users_cursor;
 END;;
 
 CREATE PROCEDURE add_post(IN user_id INT UNSIGNED, IN content VARCHAR(255))

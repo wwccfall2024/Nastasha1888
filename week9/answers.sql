@@ -160,11 +160,12 @@ BEGIN
       FROM friends 
       WHERE user_id = user_id;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
+    
     INSERT INTO posts 
       (user_id, content)
     VALUES 
       (user_id, content);
+    SET @last_post_id = LAST_INSERT_ID();
 
     OPEN friends_cursor;
 
@@ -177,7 +178,7 @@ BEGIN
         INSERT INTO notifications 
           (user_id, post_id)
         VALUES 
-          (friend_id, LAST_INSERT_ID());
+          (friend_id, @last_post_id);
     END LOOP;
 
     CLOSE friends_cursor;

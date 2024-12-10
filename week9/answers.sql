@@ -89,8 +89,6 @@ BEGIN
     CLOSE post_id_cursor;
 END ;;
 
-DELIMITER ;
-
 CREATE TABLE fetched_users (
     post_id INT,
     user_id INT

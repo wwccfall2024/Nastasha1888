@@ -119,18 +119,17 @@ BEGIN
   
   DECLARE done INT DEFAULT FALSE;
   DECLARE current_user_id INT;
-
-  INSERT INTO posts 
-    (user_id, content)
-  VALUES 
-    (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
-  
   DECLARE users_cursor CURSOR FOR 
     SELECT user_id 
       FROM users 
       WHERE user_id != NEW.user_id;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-  
+
+  INSERT INTO posts 
+    (user_id, content)
+  VALUES 
+    (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+
   OPEN users_cursor;
   
   users_loop: LOOP

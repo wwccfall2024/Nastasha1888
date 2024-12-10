@@ -116,42 +116,44 @@ CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
-  
+
   DECLARE done INT DEFAULT FALSE;
   DECLARE current_user_id INT;
   DECLARE users_cursor CURSOR FOR 
     SELECT user_id 
       FROM users 
       WHERE user_id != NEW.user_id;
+
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  DECLARE last_post_id INT;
+  SET last_post_id = LAST_INSERT_ID();
 
   INSERT INTO posts 
     (user_id, content)
   VALUES 
     (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
-    SET @last_post_id = LAST_INSERT_ID();
 
-    INSERT INTO notifications (user_id, post_id) VALUES (current_user_id, @last_post_id);
   OPEN users_cursor;
-  
+
   users_loop: LOOP
       FETCH users_cursor INTO current_user_id;
       IF done THEN
           LEAVE users_loop;
       END IF;
-  
+
       INSERT INTO notifications 
         (user_id, post_id)
       VALUES 
-        (current_user_id, LAST_INSERT_ID());
+        (current_user_id, last_post_id);
   END LOOP;
-  
+
   CLOSE users_cursor;
 END;;
 
 CREATE PROCEDURE add_post(IN user_id INT UNSIGNED, IN content VARCHAR(255))
 BEGIN
-  
+
     DECLARE done INT DEFAULT FALSE;
     DECLARE friend_id INT;
 
@@ -159,13 +161,14 @@ BEGIN
       SELECT friend_id 
       FROM friends 
       WHERE user_id = user_id;
+
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
+
     INSERT INTO posts 
       (user_id, content)
     VALUES 
       (user_id, content);
-    SET @last_post_id = LAST_INSERT_ID();
+    SET new_post_id = LAST_INSERT_ID();
 
     OPEN friends_cursor;
 
@@ -178,7 +181,7 @@ BEGIN
         INSERT INTO notifications 
           (user_id, post_id)
         VALUES 
-          (friend_id, @last_post_id);
+          (friend_id, new_post_id);
     END LOOP;
 
     CLOSE friends_cursor;

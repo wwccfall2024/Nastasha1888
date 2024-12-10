@@ -119,15 +119,14 @@ BEGIN
 
   DECLARE done INT DEFAULT FALSE;
   DECLARE current_user_id INT;
+  DECLARE last_post_id INT;
+
   DECLARE users_cursor CURSOR FOR 
     SELECT user_id 
       FROM users 
       WHERE user_id != NEW.user_id;
 
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-  DECLARE last_post_id INT;
-  SET last_post_id = LAST_INSERT_ID();
 
   INSERT INTO posts 
     (user_id, content)

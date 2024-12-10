@@ -103,8 +103,8 @@ SELECT c.character_id,
 	i.name AS item_name,
 	i.armor, i.damage
 FROM characters c
-LEFT JOIN equipped eq ON c.character_id = eq.character_id
-LEFT JOIN items i ON eq.item_id = i.item_id
+LEFT OUTER JOIN equipped eq ON c.character_id = eq.character_id
+LEFT OUTER JOIN items i ON eq.item_id = i.item_id
 ORDER BY character_name, item_name;
 
 CREATE OR REPLACE VIEW team_items AS 
@@ -113,9 +113,9 @@ SELECT tm.team_id,
 	i.name AS item_name,
 	i.armor, i.damage
 	FROM team_members tm
-	JOIN teams t 
+	INNER JOIN teams t 
 		ON tm.team_id = t.team_id
-	JOIN characters c 
+	INNER JOIN characters c 
 		ON tm.character_id = c.character_id
 	LEFT OUTER JOIN inventory inv 
 		ON c.character_id = inv.character_id
@@ -128,9 +128,9 @@ SELECT tm.team_id,
 	       i.name AS item_name,
 	       i.armor, i.damage
 		FROM team_members tm
-		JOIN teams t 
+		INNER JOIN teams t 
 			ON tm.team_id = t.team_id
-		JOIN characters c 
+		INNER JOIN characters c 
 			ON tm.character_id = c.character_id
 		LEFT OUTER JOIN equipped e 
 			ON c.character_id = e.character_id
@@ -169,43 +169,40 @@ CREATE PROCEDURE attack(
     IN id_of_equipped_item_used_for_attack INT
 )
 BEGIN
-    DECLARE total_damage INT;
-    DECLARE damage INT;
-    DECLARE armor INT;
-    DECLARE character_health INT;
-    
-    DECLARE health_cursor CURSOR FOR 
-            SELECT health 
-            	FROM character_stats 
-            	WHERE character_id = id_of_character_being_attacked;
-
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET character_health = -1;
-	
+	DECLARE total_damage INT;
+	DECLARE damage INT;
+	DECLARE armor INT;
+	DECLARE character_health INT;
+    	
 	SELECT i.damage INTO damage
 	    	FROM equipped e
-	    	JOIN items i 
+	    	INNER JOIN items i 
 			ON e.item_id = i.item_id
 	    	WHERE e.equipped_id = id_of_equipped_item_used_for_attack;
+
+	SELECT health INTO character_health
+    		FROM character_stats
+    		WHERE character_id = id_of_character_being_attacked;
 
 	SET armor = armor_total(id_of_character_being_attacked);
 	SET total_damage = damage - armor;
 	
 	IF total_damage > 0 THEN
-		OPEN health_cursor;
-		FETCH health_cursor INTO character_health;
-		CLOSE health_cursor;
-	
-	SET character_health = character_health - total_damage;
-	
-	UPDATE character_stats
-	SET health = health - total_damage
-	WHERE character_id = id_of_character_being_attacked;
+		SET character_health = character_health - total_damage;
 
-        IF character_health <= 0 THEN
-		DELETE FROM characters 
-            WHERE character_id = id_of_character_being_attacked;
-        END IF;
-    END IF;
+        	IF character_health < 0 THEN
+            		SET character_health = 0;
+       		END IF;
+	
+		UPDATE character_stats
+		SET health = health - total_damage
+		WHERE character_id = id_of_character_being_attacked;
+
+        	IF character_health <= 0 THEN
+			DELETE FROM characters 
+            		WHERE character_id = id_of_character_being_attacked;
+        	END IF;
+    	END IF;
 END;;
 
 CREATE PROCEDURE equip(

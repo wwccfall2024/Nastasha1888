@@ -150,9 +150,6 @@ END;;
 CREATE PROCEDURE add_post(IN user_id INT UNSIGNED, IN content VARCHAR(255))
 BEGIN
   
-    INSERT INTO posts (user_id, content)
-    VALUES (user_id, content);
-
     DECLARE done INT DEFAULT FALSE;
     DECLARE friend_id INT;
 
@@ -161,6 +158,11 @@ BEGIN
       FROM friends 
       WHERE user_id = user_id;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    INSERT INTO posts 
+      (user_id, content)
+    VALUES 
+      (user_id, content);
 
     OPEN friends_cursor;
 

@@ -155,6 +155,7 @@ BEGIN
 
     DECLARE done INT DEFAULT FALSE;
     DECLARE friend_id INT;
+    DECLARE new_post_id INT;
 
     DECLARE friends_cursor CURSOR FOR 
       SELECT friend_id 
@@ -167,7 +168,6 @@ BEGIN
       (user_id, content)
     VALUES 
       (user_id, content);
-    SET new_post_id = LAST_INSERT_ID();
 
     OPEN friends_cursor;
 

@@ -125,7 +125,7 @@ BEGIN
       UNION
       SELECT user_id
         FROM friends
-        WHERE friend_id = p.user_id;
+        WHERE friend_id = p_user_id;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 

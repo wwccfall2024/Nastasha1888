@@ -128,9 +128,10 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
     INSERT INTO posts
-      (iser_id, content)
+      (user_id, content)
     VALUES
-      (p_user_id, p_content)
+      (p_user_id, p_content);
+
     SET last_post_id = LAST_INSERT_ID();
 
     OPEN friends_cursor;

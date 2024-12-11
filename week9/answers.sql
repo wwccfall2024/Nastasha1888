@@ -155,7 +155,7 @@ BEGIN
 
     DECLARE done INT DEFAULT FALSE;
     DECLARE friend_id INT;
-    DECLARE new_post_id INT;
+    DECLARE last_post_id INT;
 
     DECLARE friends_cursor CURSOR FOR 
       SELECT friend_id 
@@ -180,7 +180,7 @@ BEGIN
         INSERT INTO notifications 
           (user_id, post_id)
         VALUES 
-          (friend_id, new_post_id);
+          (friend_id, last_post_id);
     END LOOP;
 
     CLOSE friends_cursor;

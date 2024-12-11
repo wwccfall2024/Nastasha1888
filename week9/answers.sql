@@ -102,8 +102,6 @@ BEGIN
           LEAVE users_loop;
       END IF;
 
-      
-
       INSERT INTO notifications 
         (user_id, post_id)
       VALUES 
@@ -130,7 +128,7 @@ BEGIN
     INSERT INTO posts
       (user_id, content)
     VALUES
-      (p_user_id, p_content);
+      (user_id, content);
 
     SET last_post_id = LAST_INSERT_ID();
 

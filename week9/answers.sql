@@ -81,7 +81,7 @@ BEGIN
       WHERE post_id = current_post_id;
 
       INSERT INTO fetched_users 
-        (current_post_id, current_user_id) 
+        (post_id, user_id) 
       VALUES 
         (current_post_id, current_user_id);
     END LOOP;

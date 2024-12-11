@@ -55,6 +55,11 @@ CREATE TABLE notifications (
   ON DELETE CASCADE
 );
 
+CREATE TABLE fetched_users (
+    post_id INT,
+    user_id INT
+);
+
 DELIMITER ;;
 
 CREATE PROCEDURE fetch_user_ids()
@@ -88,11 +93,6 @@ BEGIN
 
     CLOSE post_id_cursor;
 END ;;
-
-CREATE TABLE fetched_users (
-    post_id INT,
-    user_id INT
-);
 
 CREATE OR REPLACE VIEW notification_posts AS
 SELECT 

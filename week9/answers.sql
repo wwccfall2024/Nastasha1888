@@ -121,7 +121,7 @@ BEGIN
     DECLARE friends_cursor CURSOR FOR 
       SELECT friend_id 
         FROM friends 
-        WHERE user_id = p_user_id;
+        WHERE user_id = p_user_id
       UNION
       SELECT user_id
         FROM friends

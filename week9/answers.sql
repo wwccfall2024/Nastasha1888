@@ -111,7 +111,7 @@ BEGIN
   CLOSE users_cursor;
 END;;
 
-CREATE PROCEDURE add_post(IN user_id INT UNSIGNED, IN content VARCHAR(255))
+CREATE PROCEDURE add_post(IN p_user_id INT UNSIGNED, IN p_content VARCHAR(255))
 BEGIN
 
     DECLARE done INT DEFAULT FALSE;
@@ -121,14 +121,14 @@ BEGIN
     DECLARE friends_cursor CURSOR FOR 
       SELECT friend_id 
       FROM friends 
-      WHERE user_id = user_id;
+      WHERE user_id = p_user_id;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
     INSERT INTO posts
       (user_id, content)
     VALUES
-      (user_id, content);
+      (p_user_id, p_content);
 
     SET last_post_id = LAST_INSERT_ID();
 

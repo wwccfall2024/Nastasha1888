@@ -128,11 +128,6 @@ BEGIN
 
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-  INSERT INTO posts 
-    (user_id, content)
-  VALUES 
-    (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
-
   OPEN users_cursor;
 
   users_loop: LOOP
@@ -144,7 +139,7 @@ BEGIN
       INSERT INTO notifications 
         (user_id, post_id)
       VALUES 
-        (current_user_id, last_post_id);
+        (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
   END LOOP;
 
   CLOSE users_cursor;
@@ -163,11 +158,6 @@ BEGIN
       WHERE user_id = user_id;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-    INSERT INTO posts 
-      (user_id, content)
-    VALUES 
-      (user_id, content);
 
     OPEN friends_cursor;
 

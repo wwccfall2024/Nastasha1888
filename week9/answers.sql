@@ -128,6 +128,13 @@ BEGIN
 
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
+  INSERT INTO posts 
+    (user_id, content)
+      VALUES 
+    (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+
+  SET last_post_id = LAST_INSERT_ID();
+
   OPEN users_cursor;
 
   users_loop: LOOP
@@ -136,8 +143,7 @@ BEGIN
           LEAVE users_loop;
       END IF;
 
-      INSERT INTO posts (user_id, content)
-        VALUES (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+      
 
       INSERT INTO notifications 
         (user_id, post_id)

@@ -148,7 +148,7 @@ BEGIN
       INSERT INTO notifications 
         (user_id, post_id)
       VALUES 
-        (NEW.user_id, CONCAT(NEW.first_name, ' ', NEW.last_name, ' just joined!'));
+        (current_user_id, last_post_id);
   END LOOP;
 
   CLOSE users_cursor;

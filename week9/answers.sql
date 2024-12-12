@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE sessions (
   session_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  user_id INT UNSIGNED,
+  user_id INT UNSIGNED NOT NULL,
   created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
   CONSTRAINT users_fk_sessions
@@ -22,8 +22,8 @@ CREATE TABLE sessions (
 
 CREATE TABLE friends (
   user_friend_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  user_id INT UNSIGNED,
-  friend_id INT UNSIGNED,
+  user_id INT UNSIGNED NOT NULL,
+  friend_id INT UNSIGNED NOT NULL,
   CONSTRAINT friends_fk_users
     FOREIGN KEY (user_id) REFERENCES users(user_id)
   ON DELETE CASCADE,
@@ -34,7 +34,7 @@ CREATE TABLE friends (
 
 CREATE TABLE posts (
   post_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  user_id INT UNSIGNED,
+  user_id INT UNSIGNED NOT NULL,
   created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
   content VARCHAR(255) NOT NULL,
@@ -45,8 +45,8 @@ CREATE TABLE posts (
 
 CREATE TABLE notifications (
   notification_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  user_id INT UNSIGNED,
-  post_id INT UNSIGNED,
+  user_id INT UNSIGNED NOT NULL,
+  post_id INT UNSIGNED NOT NULL,
   CONSTRAINT notifications_fk_users
     FOREIGN KEY (user_id) REFERENCES users(user_id)
   ON DELETE CASCADE,
@@ -122,10 +122,6 @@ BEGIN
       SELECT f.friend_id 
         FROM friends f
         WHERE f.user_id = p_user_id
-      UNION
-      SELECT f.user_id
-        FROM friends f
-        WHERE f.friend_id = p_user_id;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 

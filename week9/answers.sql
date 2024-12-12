@@ -121,7 +121,7 @@ BEGIN
     DECLARE friends_cursor CURSOR FOR 
       SELECT f.friend_id 
         FROM friends f
-        WHERE f.user_id = p_user_id
+        WHERE f.user_id = p_user_id;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 

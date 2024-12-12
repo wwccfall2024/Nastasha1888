@@ -119,13 +119,13 @@ BEGIN
     DECLARE last_post_id INT;
 
     DECLARE friends_cursor CURSOR FOR 
-      SELECT friend_id 
-        FROM friends 
-        WHERE user_id = p_user_id
+      SELECT f.friend_id 
+        FROM friends f
+        WHERE f.user_id = p_user_id
       UNION
-      SELECT user_id
-        FROM friends
-        WHERE friend_id = p_user_id;
+      SELECT f.user_id
+        FROM friends f
+        WHERE f.friend_id = p_user_id;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
